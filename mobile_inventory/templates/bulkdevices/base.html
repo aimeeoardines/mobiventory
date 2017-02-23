@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main_navigation %}
+  {% if request.session.emp_id %}
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="{% url 'home' %}">Devices Bulk Retrieval</a></li>
+      <li role="presentation"><a href="{% url 'manage_devices' %}">Manage Devices</a></li>
+      <li role="presentation"><a href="{% url 'staffs' %}">Staffs and Users</a></li>
+    </ul>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'staff/base.html' %}
+
+{% block content %}
+  <ul class="nav nav-tabs list-inline">
+    <li class="active"><a style="display: inline;" href="{% url 'staffs' %}">Staffs</a><a style="display: inline" href="#">#</a></li>
+    <li><a href="{% url 'users' %}">Users</a></li>
+    <li><a href="{% url 'teams' %}">Teams</a></li>
+  </ul>
+  <hr/>
+
+  <table class="table table-hover">
+    <th>Name</th>
+    <th>Emp ID</th>
+    <th>Date Added</th>
+    <th>Added By</th>
+    <th>Actions</th>
+    {% for staff in staffs %}
+      <tr>
+        <td>{{ staff.name }}</td>
+        <td>{{ staff.emp_id }}</td>
+        <td>{{ staff.date_added }}</td>
+        <td>
+        {% if staff.added_by__name %}
+          {{ staff.added_by__name }}
+        {% else %}
+          Superuser
+        {% endif %}
+        </td>
+        <td>
+        <a href="#">Edit</a>
+        {% if request.session.id != staff.id %}
+          &emsp;<a href="{% url 'deletestaff' pk=staff.id %}" style="size: 20; color: red;"><em><strong>X</strong><em></a>
+        {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

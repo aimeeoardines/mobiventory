@@ -1,0 +1,7 @@
+Django==1.9
+requests==2.11.1
+djangorestframework==3.4.7
+django-widget-tweaks==1.4.1
+django-js-reverse==0.7.3
+Pillow==4.0.0
+xlwt==1.2.0

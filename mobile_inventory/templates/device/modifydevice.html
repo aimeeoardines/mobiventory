@@ -1,0 +1,18 @@
+{% extends 'device/base.html' %}
+
+{% block content %}
+  <div class="col-md-12">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+    <div class="form-group">
+      <form method="POST" enctype="multipart/form-data" action="{% url 'modify_device' %}">{% csrf_token %}
+        {{ device_form.as_p }}
+        {{ status_form.as_p }}
+        <input type="hidden" name="device_id" value="{{ pk }}"></input>
+        <br/>
+        <button class="btn btn-success" type="submit">Edit</button>
+      </form>
+    </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'bulkdevices/base.html' %}
+
+{% block content %}
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="{% url 'home' %}">All Devices</a></li>
+    <li><a href="{% url 'available_devices_list' %}">Available Devices</a></li>
+    <li><a href="{% url 'borrowed_devices_list' %}">Borrowed Devices</a></li>
+  </ul>
+  <hr/>
+
+  <form method="GET">
+    {{ search_form.keyword }}
+    <input type="submit" style="display: none; visibility: hidden;"></input>
+  </form>
+
+  <table class='table table-hover'>
+    <th>Category</th>
+    <th>Model</th>
+    <th>Barcode</th>
+    <th>Serial no</th>
+    <th>Service Tag</th>
+    <th>Health</th>
+    <th>Location</th>
+    <th>Notes</th>
+    <th>Device Status</th>
+    {% for searched_device in searched_devices %}
+      <tr style="color: red">
+        <td>{{ searched_device.category__category }}</td>
+        <td>{{ searched_device.model }}</td>
+        <td>{{ searched_device.status__barcode }}</td>
+        <td>{{ searched_device.serial_no }}</td>
+        <td>{{ searched_device.service_tag }}</td>
+        <td>{{ searched_device.status__health }}</td>
+        <td>{{ searched_device.status__location__location }}</td>
+        <td>{{ searched_device.status__notes }}</td>
+        <td>
+          {% if  searched_device.status__is_available %}
+            Available
+          {% else %}
+            Borrowed
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+
+    {% for device in devices %}
+    <tr data-toggle="popover" data-placement="top" data-content="<img src='{{ device.status__image }}' />">
+      <td>{{ device.category__category }}</td>
+      <td>{{ device.model }}</td>
+      <td>{{ device.status__barcode }}</td>
+      <td>{{ device.serial_no }}</td>
+      <td>{{ device.service_tag }}</td>
+      <td>{{ device.status__health }}</td>
+      <td>{{ device.status__location__location }}</td>
+      <td>{{ device.status__notes }}</td>
+      <td>
+        {% if device.status__is_available and device.status__health == 'Functional' %}
+          Available
+        {% elif device.status__is_available and device.status__health == 'Defective' %}
+          Unavailable
+        {% else %}
+          Borrowed
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="popover"]').popover({
+        html: true,
+      })
+    })
+  </script>
+{% endblock %}

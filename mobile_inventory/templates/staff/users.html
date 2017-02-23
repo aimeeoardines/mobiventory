@@ -1,0 +1,26 @@
+{% extends 'staff/base.html' %}
+
+{% block content %}
+  <ul class="nav nav-tabs">
+    <li><a href="{% url 'staffs' %}">Staffs</a></li>
+    <li class="active"><a href="{% url 'users' %}">Users</a></li>
+    <li><a href="{% url 'teams' %}">Teams</a></li>
+
+    <table class="table table-hover">
+      <th>Emp ID</th>
+      <th>Name</th>
+      <th>Actions</th>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.emp_id }}</td>
+          <td>{{ user.name }}</td>
+          <td>
+            <a href="#">Edit</a>
+            &emsp;<a href="{% url 'deleteuser' pk=user.id %}" style="size: 20; color: red;"><em><strong>X</strong><em></a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </ul>
+  <hr/>
+{% endblock %}

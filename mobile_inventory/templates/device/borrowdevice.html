@@ -1,0 +1,30 @@
+{% extends 'device/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="col-md-12">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+    <div class="form-group">
+      <form method="POST" action="{% url 'borrow_device' pk=pk %}">{% csrf_token %}
+        {{ form.borrower.label }}
+        {{ form.borrower }}
+        <br/>
+        {{ form.health.label }}
+        {{ form.health }}
+        <br/>
+        {{ form.notes.label }}
+        {{ form.notes }}
+        <br/>
+        {{ form.to_which_project.label }}
+        {{ form.to_which_project }}
+        <br/>
+        {{ form.expected_return_date.label }}
+        {{ form.expected_return_date|attr:"type:date"|attr:"required" }}
+        <br/>
+        <button class="btn btn-success" type="submit">Borrow</button>
+      </form>
+    </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'device/base.html' %}
+
+{% block content %}
+  {% for error in form_errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
+
+  <a href="#" data-toggle="modal" data-target="#addDevice">Add Device</a>|
+  <a href="#" class="category">Add Category</a>|
+  <a href="#" class="location">Add Location</a>
+
+  <div class="row">
+    <div id="category-add" style="display: none">
+      <form method="POST" action="{% url 'category_add' %}">{% csrf_token %}
+        {{ add_category_form }}
+        <button class="btn btn-success">Add Category</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="location-add" style="display: none;">
+      <form method="POST" action="{% url 'location_add' %}">{% csrf_token %}
+        {{ add_location_form }}
+        <button class="btn btn-success">Add Location</button>
+      </form>
+    </div>
+  </div>
+
+  <br/>
+  <form>{% csrf_token %}
+    {{ search_form.keyword }}
+    <input type="submit" style="display: none; visibility: hidden">
+  </form>
+  <table class="table table-grid table-hover">
+    <th>Category</th>
+    <th>Model</th>
+    <th>Serial no</th>
+    <th>Service Tag</th>
+    <th>Barcode</th>
+    <th>Health</th>
+    <th>Location</th>
+    <th>Notes</th>
+    <th>Actions</th>
+    {% for search_device in searched_devices %}
+      <tr style="color:red"  data-toggle="popover" data-placement="top" data-content="<img src='{{ search_device.status__image }}' />">
+        <td>{{ search_device.category__category }}</td>
+        <td>{{ search_device.model }}</td>
+        <td>{{ search_device.serial_no }}</td>
+        <td>{{ search_device.service_tag }}</td>
+        <td>{{ search_device.status__barcode }}</td>
+        <td>{{ search_device.status__health }}</td>
+        <td>{{ search_device.status__location__location }}</td>
+        <td>{{ search_device.status__notes }}</td>
+        <td>
+          {% if search_device.status__is_available %}
+            <a href="{% url 'redirect_to_borrow_page' pk=search_device.id %}">Borrow</a>
+          {% else %}
+            <a href="{% url 'redirect_to_return_page' pk=search_device.id status_pk=search_device.status__id %}">Return</a>
+          {% endif %}
+          &emsp;<a href="{% url 'redirect_to_modify_page' device_pk=search_device.id status_pk=search_device.status__id %}">Edit</a>
+          &emsp;<a href="{% url 'delete_device' pk=search_device.id %}" style="size: 20; color: red;"><em><strong>X</strong><em></a>
+        </td>
+      </tr>
+    {% endfor %}
+    {% for device in devices %}
+      <tr data-toggle="popover" data-placement="top" data-content="<img src='{{ device.status__image }}' />">
+        <td>{{ device.category__category }}</td>
+        <td>{{ device.model }}</td>
+        <td>{{ device.serial_no }}</td>
+        <td>{{ device.service_tag }}</td>
+        <td>{{ device.status__barcode }}</td>
+        <td>{{ device.status__health }}</td>
+        <td>{{ device.status__location__location }}</td>
+        <td>{{ device.status__notes }}</td>
+        <td>
+          {% if device.status__is_available and device.status__health == 'Functional' %}
+            <a href="{% url 'redirect_to_borrow_page' pk=device.id %}">Borrow</a>
+          {% elif not device.status__is_available and device.status__health == 'Functional' %}
+            <a href="{% url 'redirect_to_return_page' pk=device.id status_pk=device.status__id %}">Return</a>
+          {% endif %}
+          &emsp;<a href="{% url 'redirect_to_modify_page' device_pk=device.id status_pk=device.status__id %}">Edit</a>
+          &emsp;<a href="{% url 'delete_device' pk=device.id %}" style="size: 20; color: red;"><em><strong>X</strong><em></a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <!-- Add Device+Status -->
+  <div class="modal fade bs-example-modal-sm" id="addDevice" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'device_add' %}">{% csrf_token %}
+          <div class="modal-header">
+            <button class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4>Add Device</h4>
+          </div>
+          <div class="modal-body form-group">
+            {{ add_device_form.as_p }}
+            {{ add_status_form.as_p }}
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Add Device</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".category").click(function(){
+        $("#category-add").slideToggle("slow");
+      });
+    });
+
+    $(document).ready(function(){
+      $(".location").click(function(){
+        $("#location-add").slideToggle("slow");
+      });
+    });
+
+    $(function () {
+      $('[data-toggle="popover"]').popover({
+        html: true,
+      })
+    })
+  </script>
+{% endblock %}

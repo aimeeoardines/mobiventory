@@ -1,0 +1,42 @@
+.header{
+  margin-top: -5px;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.page-header {
+  height: auto;
+  min-height: 100px;
+  padding: 10px;
+  padding-top: 30px;
+}
+
+.primary-text {
+  color: #00cc33;
+}
+
+.primary-background {
+  background-color: #00cc33;
+}
+
+.secondary-text {
+  color: white;
+}
+
+.secondary-background {
+  background-color: white;
+}
+
+.tertiary-text {
+  color: black;
+}
+
+.tertiary-background {
+  background-color: black;
+}
+
+
+/* Trash design.Please discard when done debugging */
+.border {
+  border: 1px solid black;
+}

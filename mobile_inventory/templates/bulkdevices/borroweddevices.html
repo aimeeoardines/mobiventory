@@ -1,0 +1,34 @@
+{% extends 'bulkdevices/base.html' %}
+
+{% block title %}Borrowed Items{% endblock %}
+
+{% block content %}
+  <ul class="nav nav-tabs">
+    <li><a href="{% url 'home' %}">All Devices</a></li>
+    <li><a href="{% url 'available_devices_list' %}">Available Devices</a></li>
+    <li class="active"><a href="{% url 'borrowed_devices_list' %}">Borrowed Devices</a></li>
+  </ul>
+  <hr/>
+  <table class="table table-hover">
+    <th>Category</th>
+    <th>Model</th>
+    <th>Serial no</th>
+    <th>Service Tag</th>
+    <th>Health</th>
+    <th>Location</th>
+    <th>Notes</th>
+    <th>Borrower</th>
+    {% for device in devices %}
+      <tr>
+        <td>{{ device.category__category }}</td>
+        <td>{{ device.model }}</td>
+        <td>{{ device.serial_no }}</td>
+        <td>{{ device.service_tag }}</td>
+        <td>{{ device.status__health }}</td>
+        <td>{{ device.status__location__location }}</td>
+        <td>{{ device.status__notes }}</td>
+        <td>{{ device.borrower__name }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
