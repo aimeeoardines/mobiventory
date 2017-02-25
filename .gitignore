@@ -1,0 +1,5 @@
+# Ignore python cache
+*.pyc
+
+# Ignore image directory
+media/
