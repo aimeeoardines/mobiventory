@@ -1,3 +1,4 @@
+import base64
 import json
 
 from django.core.urlresolvers import reverse
@@ -370,6 +371,8 @@ class ReturnDevicesAPI(APIView):
             image = request.query_params['image']
             if not image:
                 raise
+
+            image = base64.base64decode(imagedata)
         except:
             image = previous_device.status.image
 
@@ -432,6 +435,8 @@ class UpdateDevicesAPI(APIView):
             image = request.query_params['image']
             if not image:
                 raise
+
+            image = base64.base64decode(imagedata)
         except:
             image = None
 
@@ -528,9 +533,12 @@ class AddDeviceAPI(APIView):
             health = 'Functional'
 
         try:
-            image = request.query_params['image']
+            imagedata = request.query_params['image']
             if not image:
                 raise
+
+            # Process passed base64 image
+            image = base64.base64decode(imagedata)
         except:
             image = None
 
@@ -939,7 +947,7 @@ class ModifyDevice(View):
                 notes=notes,
                 serial_no=serial_no,
                 service_tag=service_tag,
-                transaction_date=timezone.now,
+                transaction_date=timezone.now(),
             )
             return redirect('manage_devices')
 
